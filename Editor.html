@@ -1,0 +1,729 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#2d0b5e "> 
+    <title> ALHMAT.AI Compiler</title>
+    <link rel="icon" href="Oreintention flayer 1/ahmad1.jpeg" sizes="16x16" type="image/png">
+     <link rel="icon" href="Oreintention flayer 1/ahmad1.jpeg" sizes="32x32" type="image/png">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #0a0a1a, #1a1a2a);
+            color: #fff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .compiler-container {
+            width: 1512px;
+            height: 1200px;
+            background: #0d0d16;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 0 30px rgba(138, 43, 226, 0.4);
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .header {
+            background: linear-gradient(90deg, #0a0a1a, #2d0b5e);
+            padding: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-bottom: 2px solid #8a2be2;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+        }
+        
+        .logo-icon {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(45deg, #8a2be2, #da70d6);
+            border-radius: 8px;
+            margin-right: 15px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-weight: bold;
+            font-size: 20px;
+        }
+        
+        .logo-text {
+            font-size: 28px;
+            font-weight: 700;
+            background: linear-gradient(45deg, #9370db, #da70d6);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .run-btn {
+            padding: 10px 25px;
+            background: linear-gradient(90deg, #32cd32, #228b22);
+            border: none;
+            border-radius: 6px;
+            color: white;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            box-shadow: 0 0 15px rgba(50, 205, 50, 0.4);
+        }
+        
+        .run-btn i {
+            margin-right: 8px;
+        }
+        
+        .run-btn:hover {
+            background: linear-gradient(90deg, #228b22, #32cd32);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(50, 205, 50, 0.6);
+        }
+        
+        .main-content {
+            display: flex;
+            flex: 1;
+            overflow: hidden;
+        }
+        
+        .editor-section {
+            width: 60%;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            border-right: 2px solid #2d0b5e;
+        }
+        
+        .output-section {
+            width: 40%;
+            padding: 20px;
+            background: #0a0a1a;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .section-title {
+            font-size: 18px;
+            margin-bottom: 15px;
+            color: #9370db;
+            display: flex;
+            align-items: center;
+        }
+        
+        .section-title i {
+            margin-right: 10px;
+            font-size: 20px;
+        }
+        
+        .code-editor {
+            background: #0a0a1a;
+            border: 1px solid #4b0082;
+            border-radius: 8px;
+            padding: 15px;
+            color: #e6e6fa;
+            font-family: 'Courier New', monospace;
+            flex: 1;
+            resize: none;
+            outline: none;
+            line-height: 1.5;
+        }
+        
+        .output-display {
+            background: #0a0a1a;
+            border: 1px solid #4b0082;
+            border-radius: 8px;
+            padding: 15px;
+            color: #e6e6fa;
+            font-family: 'Courier New', monospace;
+            flex: 1;
+            overflow-y: auto;
+            white-space: pre-wrap;
+        }
+        
+        .button-container {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        .action-btn {
+            flex: 1;
+            padding: 12px;
+            border: none;
+            border-radius: 6px;
+            background: linear-gradient(90deg, #4b0082, #8a2be2);
+            color: white;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .action-btn i {
+            margin-right: 8px;
+        }
+        
+        .action-btn:hover {
+            background: linear-gradient(90deg, #8a2be2, #9370db);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(138, 43, 226, 0.4);
+        }
+        
+        .file-btn {
+            background: linear-gradient(90deg, #6a0dad, #9370db);
+        }
+        
+        .file-btn:hover {
+            background: linear-gradient(90deg, #9370db, #6a0dad);
+        }
+        
+        .footer {
+            padding: 15px 20px;
+            background: #0a0a1a;
+            border-top: 1px solid #2d0b5e;
+            text-align: center;
+            color: #9370db;
+            font-size: 14px;
+        }
+        
+        .language-tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+        
+        .language-tab {
+            padding: 8px 15px;
+            background: #2d0b5e;
+            border-radius: 4px;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .language-tab.active {
+            background: #8a2be2;
+        }
+        
+        .output-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        
+        .clear-btn {
+            background: #4b0082;
+            border: none;
+            color: #e6e6fa;
+            padding: 6px 12px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+        
+        .compiler-info {
+            margin-top: 20px;
+            padding: 15px;
+            background: #0a0a1a;
+            border: 1px solid #4b0082;
+            border-radius: 8px;
+            font-size: 14px;
+            color: #9370db;
+        }
+        
+        .output-content {
+            padding: 10px;
+        }
+        
+        .output-content h3 {
+            color: #32cd32;
+            margin-bottom: 10px;
+        }
+        
+        .output-content p {
+            margin-bottom: 15px;
+            line-height: 1.5;
+        }
+        
+        .output-content .code {
+            background: #1a1a2a;
+            padding: 10px;
+            border-radius: 6px;
+            margin: 10px 0;
+            overflow-x: auto;
+        }
+        
+        .drop-zone {
+            border: 2px dashed #8a2be2;
+            border-radius: 8px;
+            padding: 20px;
+            text-align: center;
+            margin-top: 15px;
+            background: rgba(138, 43, 226, 0.1);
+            transition: all 0.3s ease;
+        }
+        
+        .drop-zone:hover {
+            background: rgba(138, 43, 226, 0.2);
+        }
+        
+        .drop-zone p {
+            margin-bottom: 10px;
+            color: #9370db;
+        }
+        
+        .drop-zone.active {
+            border-color: #32cd32;
+            background: rgba(50, 205, 50, 0.1);
+        }
+        
+        .file-input {
+            display: none;
+        }
+        
+        .file-label {
+            display: inline-block;
+            padding: 8px 15px;
+            background: #4b0082;
+            color: white;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .file-label:hover {
+            background: #6a0dad;
+        }
+        
+        .file-name {
+            margin-top: 10px;
+            font-size: 14px;
+            color: #9370db;
+        }
+
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="compiler-container">
+        <div class="header">
+            <div class="logo">
+                <div class="logo-icon">A</div>
+                <div class="logo-text">ALHMAT.AI COMPILER</div>
+            </div>
+            <button class="run-btn" id="runBtn">
+                <i class="fas fa-play"></i> RUN
+            </button>
+        </div>
+        
+        <div class="main-content">
+            <div class="editor-section">
+                <div class="section-title">
+                    <i class="fas fa-code"></i> CODE EDITOR
+                </div>
+                
+                <div class="language-tabs">
+                    <div class="language-tab active">HTML</div>
+                    <div class="language-tab">CSS</div>
+                    <div class="language-tab">JavaScript</div>
+                </div>
+                
+                <textarea class="code-editor" id="codeEditor" placeholder="Write your code here..."><!DOCTYPE html>
+<html>
+<head>
+    <title>ALHMAT.AI Compiler</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 40px;
+            background: #0a0a1a;
+            color: #e6e6fa;
+        }
+        h1 {
+            color: #9370db;
+            text-shadow: 0 0 10px rgba(147, 112, 219, 0.5);
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background: rgba(138, 43, 226, 0.1);
+            border-radius: 12px;
+            border: 1px solid #8a2be2;
+        }
+        .feature {
+            padding: 15px;
+            margin: 15px 0;
+            background: rgba(147, 112, 219, 0.15);
+            border-radius: 8px;
+        }
+    </style>
+
+</head>
+<body>
+    <div class="container">
+        <h1>Welcome to ALHMAT.AI Compiler</h1>
+        <p>This is a sample HTML page rendered by the compiler.</p>
+        
+        <div class="feature">
+            <h3>Compiler Features:</h3>
+            <ul>
+                <li>HTML, CSS, and JavaScript support</li>
+                <li>Real-time code execution</li>
+                <li>File save and load functionality</li>
+                <li>Drag and drop file support</li>
+                <li>Beautiful output rendering</li>
+                <li>Black and purple theme</li>
+            </ul>
+        </div>
+        
+        <p>Try modifying the code and click RUN to see changes!</p>
+    </div>
+</body>
+</html></textarea>
+                
+                <div class="button-container">
+                    <button class="action-btn" id="htmlBtn">
+                        <i class="fab fa-html5"></i> HTML
+                    </button>
+                    <button class="action-btn" id="cssBtn">
+                        <i class="fab fa-css3-alt"></i> CSS
+                    </button>
+                    <button class="action-btn" id="jsBtn">
+                        <i class="fab fa-js-square"></i> JavaScript
+                    </button>
+                </div>
+                
+                <div class="button-container">
+                    <button class="action-btn file-btn" id="saveBtn">
+                        <i class="fas fa-save"></i> Save File
+                    </button>
+                    <button class="action-btn file-btn" id="loadBtn">
+                        <i class="fas fa-folder-open"></i> Load File
+                    </button>
+                </div>
+                
+                <div class="drop-zone" id="dropZone">
+                    <p><i class="fas fa-cloud-upload-alt"></i> Drag & Drop files here</p>
+                    <p>or</p>
+                    <label for="fileInput" class="file-label">
+                        <i class="fas fa-file"></i> Select File
+                    </label>
+                    <input type="file" id="fileInput" class="file-input">
+                    <div class="file-name" id="fileName">No file selected</div>
+                </div>
+                
+                <div class="compiler-info">
+                    <p><i class="fas fa-info-circle"></i> Use the RUN button to execute your code. The output will be displayed on the right panel.</p>
+                    <p><i class="fas fa-info-circle"></i> You can save your code to a file or load code from your computer using the buttons above.</p>
+                </div>
+            </div>
+            
+            <div class="output-section">
+                <div class="output-header">
+                    <div class="section-title">
+                        <i class="fas fa-play-circle"></i> OUTPUT
+                    </div>
+                    <button class="clear-btn" id="clearBtn">
+                        <i class="fas fa-broom"></i> Clear
+                    </button>
+                </div>
+                
+                <div class="output-display" id="outputDisplay">
+                    <div style="color: #9370db; text-align: center; padding: 20px;">
+                        <i class="fas fa-code" style="font-size: 48px; margin-bottom: 15px;"></i>
+                        <p>Output will be displayed here after clicking RUN</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="footer">
+            <p>© 2025 ALHMAT.AI - Compiler Version 1.0 | Width: 1512px | Output: 40% | Height: 1200px</p>
+        </div>
+    </div>
+
+     <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const codeEditor = document.getElementById('codeEditor');
+            const outputDisplay = document.getElementById('outputDisplay');
+            const htmlBtn = document.getElementById('htmlBtn');
+            const cssBtn = document.getElementById('cssBtn');
+            const jsBtn = document.getElementById('jsBtn');
+            const runBtn = document.getElementById('runBtn');
+            const clearBtn = document.getElementById('clearBtn');
+            const saveBtn = document.getElementById('saveBtn');
+            const loadBtn = document.getElementById('loadBtn');
+            const fileInput = document.getElementById('fileInput');
+            const dropZone = document.getElementById('dropZone');
+            const fileName = document.getElementById('fileName');
+            const languageTabs = document.querySelectorAll('.language-tab');
+            
+            // Set default code for each language
+            const defaultCode = {
+                HTML: `<!DOCTYPE html>
+<html>
+<head>
+    <title>Hello World</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 40px;
+            background: #f0f0f8;
+        }
+        h1 {
+            color: #8a2be2;
+        }
+    </style>
+</head>
+<body>
+    <h1>Hello, ALHMAT.AI Compiler!</h1>
+    <p>This is a sample HTML code.</p>
+    <script>
+        console.log('Hello from JavaScript!');
+    <\/script>
+</body>
+</html>`,
+                CSS: `/* Sample CSS Code */
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    margin: 0;
+    padding: 0;
+    background: linear-gradient(135deg, #0a0a1a, #2d0b5e);
+    color: #e6e6fa;
+}
+
+.header {
+    background: rgba(138, 43, 226, 0.2);
+    padding: 20px;
+    text-align: center;
+    border-bottom: 2px solid #8a2be2;
+}
+
+.main-content {
+    max-width: 1000px;
+    margin: 20px auto;
+    padding: 20px;
+}
+
+h1 {
+    color: #9370db;
+    text-shadow: 0 0 10px rgba(147, 112, 219, 0.5);
+}`,
+                JavaScript: `// Sample JavaScript Code
+class Compiler {
+    constructor(name) {
+        this.name = name;
+        this.version = '1.0';
+    }
+    
+    compile(code) {
+        console.log(\`Compiling with \${this.name} v\${this.version}\`);
+        
+        // Simulate compilation
+        const success = Math.random() > 0.2;
+        
+        if (success) {
+            console.log('Compilation successful!');
+            return true;
+        } else {
+            console.error('Compilation failed with errors');
+            return false;
+        }
+    }
+}
+
+// Create ALHMAT.AI compiler instance
+const compiler = new Compiler('ALHMAT.AI');
+const code = 'Sample code to compile';
+compiler.compile(code);`
+            };
+            
+            // Language tab switching
+            languageTabs.forEach(tab => {
+                tab.addEventListener('click', () => {
+                    // Remove active class from all tabs
+                    languageTabs.forEach(t => t.classList.remove('active'));
+                    
+                    // Add active class to clicked tab
+                    tab.classList.add('active');
+                    
+                    // Update editor with default code for selected language
+                    const lang = tab.textContent;
+                    codeEditor.value = defaultCode[lang] || '';
+                });
+            });
+            
+            // Run Button
+            runBtn.addEventListener('click', () => {
+                outputDisplay.innerHTML = `
+                    <div style="padding: 20px; color: #9370db;">
+                        <i class="fas fa-cog fa-spin" style="font-size: 24px;"></i>
+                        <p>Running code...</p>
+                    </div>
+                `;
+                
+                setTimeout(() => {
+                    try {
+                        // Clear previous output
+                        outputDisplay.innerHTML = '';
+                        
+                        // Create an iframe to render HTML output safely
+                        const iframe = document.createElement('iframe');
+                        iframe.style.width = '100%';
+                        iframe.style.height = '100%';
+                        iframe.style.border = 'none';
+                        iframe.style.background = 'white';
+                        outputDisplay.appendChild(iframe);
+                        
+                        // Write the code to the iframe
+                        const iframeDoc = iframe.contentDocument || iframe.contentWindow.document;
+                        iframeDoc.open();
+                        iframeDoc.write(codeEditor.value);
+                        iframeDoc.close();
+                    } catch (error) {
+                        outputDisplay.innerHTML = `
+                            <div style="padding: 20px;">
+                                <h3 style="color: #ff4500;">Execution Error</h3>
+                                <p>${error.message}</p>
+                                <pre style="background: #1a1a2a; padding: 15px; border-radius: 6px; margin-top: 15px;">${codeEditor.value}</pre>
+                            </div>
+                        `;
+                    }
+                }, 800);
+            });
+            
+            // Save File Button
+            saveBtn.addEventListener('click', () => {
+                const text = codeEditor.value;
+                const blob = new Blob([text], { type: 'text/plain' });
+                const url = URL.createObjectURL(blob);
+                
+                const a = document.createElement('a');
+                a.href = url;
+                
+                // Get current language for file extension
+                let extension = '.txt';
+                languageTabs.forEach(tab => {
+                    if (tab.classList.contains('active')) {
+                        extension = '.' + tab.textContent.toLowerCase();
+                    }
+                });
+                
+                a.download = `alhmat-code${extension}`;
+                a.click();
+                
+                URL.revokeObjectURL(url);
+                
+                // Show success message
+                outputDisplay.innerHTML = `
+                    <div style="padding: 20px;">
+                        <h3 style="color: #32cd32;"><i class="fas fa-check-circle"></i> File Saved Successfully</h3>
+                        <p>Your code has been saved to your computer.</p>
+                        <p>File name: <code>alhmat-code${extension}</code></p>
+                    </div>
+                `;
+            });
+            
+            // Load File Button - trigger file input
+            loadBtn.addEventListener('click', () => {
+                fileInput.click();
+            });
+            
+            // Handle file selection
+            fileInput.addEventListener('change', (e) => {
+                const file = e.target.files[0];
+                if (file) {
+                    fileName.textContent = file.name;
+                    
+                    const reader = new FileReader();
+                    reader.onload = (e) => {
+                        codeEditor.value = e.target.result;
+                        
+                        // Show success message
+                        outputDisplay.innerHTML = `
+                            <div style="padding: 20px;">
+                                <h3 style="color: #32cd32;"><i class="fas fa-check-circle"></i> File Loaded Successfully</h3>
+                                <p>File: <code>${file.name}</code></p>
+                                <p>Size: ${Math.round(file.size / 1024)} KB</p>
+                            </div>
+                        `;
+                    };
+                    reader.readAsText(file);
+                }
+            });
+            
+            // Drag and drop functionality
+            dropZone.addEventListener('dragover', (e) => {
+                e.preventDefault();
+                dropZone.classList.add('active');
+            });
+            
+            dropZone.addEventListener('dragleave', () => {
+                dropZone.classList.remove('active');
+            });
+            
+            dropZone.addEventListener('drop', (e) => {
+                e.preventDefault();
+                dropZone.classList.remove('active');
+                
+                const file = e.dataTransfer.files[0];
+                if (file && file.type === 'text/plain') {
+                    fileName.textContent = file.name;
+                    
+                    const reader = new FileReader();
+                    reader.onload = (e) => {
+                        codeEditor.value = e.target.result;
+                        
+                        // Show success message
+                        outputDisplay.innerHTML = `
+                            <div style="padding: 20px;">
+                                <h3 style="color: #32cd32;"><i class="fas fa-check-circle"></i> File Loaded Successfully</h3>
+                                <p>File: <code>${file.name}</code></p>
+                                <p>Size: ${Math.round(file.size / 1024)} KB</p>
+                            </div>
+                        `;
+                    };
+                    reader.readAsText(file);
+                } else {
+                    outputDisplay.innerHTML = `
+                        <div style="padding: 20px;">
+                            <h3 style="color: #ff4500;"><i class="fas fa-exclamation-circle"></i> Invalid File</h3>
+                            <p>Please drop a valid text file.</p>
+                        </div>
+                    `;
+                }
+            });
+            
+            // Clear Output Button
+            clearBtn.addEventListener('click', () => {
+                outputDisplay.innerHTML = `
+                    <div style="color: #9370db; text-align: center; padding: 20px;">
+                        <i class="fas fa-code" style="font-size: 48px; margin-bottom: 15px;"></i>
+                        <p>Output cleared. Run code to see results here.</p>
+                    </div>
+                `;
+            });
+        });
+    </script>
+</body>
+</html>
